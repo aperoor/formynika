@@ -14,61 +14,117 @@
             background-color: #ffebee;
             font-family: 'Arial', sans-serif;
             text-align: center;
+            overflow: hidden;
         }
         #container {
             background: white;
             padding: 2rem;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 85%;
+            max-width: 400px;
+            position: relative;
         }
-        h1 { color: #d32f2f; }
+        h1 { color: #d32f2f; font-size: 1.4rem; min-height: 60px; }
         .buttons {
             margin-top: 20px;
             display: flex;
             justify-content: center;
             gap: 20px;
-            min-height: 50px;
+            min-height: 150px;
+            position: relative;
         }
         button {
-            padding: 10px 25px;
-            font-size: 1.2rem;
+            padding: 15px 25px;
+            font-size: 1.1rem;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s ease;
         }
-        #yesBtn { background-color: #4caf50; color: white; }
-        #noBtn { background-color: #f44336; color: white; }
-        button:hover { transform: scale(1.1); }
+        #yesBtn { background-color: #4caf50; color: white; z-index: 10; }
+        #noBtn { background-color: #f44336; color: white; position: absolute; }
         .hidden { display: none; }
+        input {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            width: 80%;
+        }
     </style>
 </head>
 <body>
 
     <div id="container">
         <div id="askSection">
-            <h1>Will you be my Valentine Navika? ❤️</h1>
-            <div class="buttons">
+            <h1 id="questionText">Will you be my Valentine Navika? ❤️</h1>
+            
+            <div id="passwordArea" class="hidden">
+                <p>Wrong answer. What's the password?</p>
+                <input type="text" id="passInput" placeholder="Type here..." oninput="checkPass()">
+            </div>
+
+            <div class="buttons" id="buttonArea">
                 <button id="yesBtn" onclick="celebrate()">Yes!</button>
-                <button id="noBtn" onmouseover="hideNo()">No</button>
+                <button id="noBtn" onclick="moveNo()">No</button>
             </div>
         </div>
 
         <div id="celebrateSection" class="hidden">
-            <h1>BBBOOOM! Joo bob Lil Brain 👒 </h1>
+            <h1>BBBOOOM! Joo bob Lil Brain 👒</h1>
             <p>I love youuuu!</p>
-            <div style="font-size: 50px;">🥰</div>
+            <div style="font-size: 50px; margin-top: 10px;">🥰</div>
         </div>
     </div>
 
     <script>
-        function hideNo() {
-            // This makes the "No" button disappear as soon as the mouse touches it
-            document.getElementById('noBtn').classList.add('hidden');
+        let noCount = 0;
+        const messages = [
+            "lol mouse slip",
+            "mouse slip again is crazy",
+            "damn.",
+            "why am i even trying anymore",
+            "at least bo nix loves me",
+            "are u acoustic or smth",
+            "if u click it one more time its over"
+        ];
+
+        function moveNo() {
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const questionText = document.getElementById('questionText');
+            
+            if (noCount < messages.length) {
+                // Change text
+                noBtn.innerHTML = messages[noCount];
+                
+                // Move button randomly
+                const x = Math.random() * (window.innerWidth - 150) - (window.innerWidth / 4);
+                const y = Math.random() * (window.innerHeight - 150) - (window.innerHeight / 4);
+                noBtn.style.left = `${x}px`;
+                noBtn.style.top = `${y}px`;
+                
+                noCount++;
+            } else {
+                // The Final Strike
+                noBtn.classList.add('hidden');
+                yesBtn.classList.add('hidden');
+                document.getElementById('passwordArea').classList.remove('hidden');
+                questionText.innerHTML = "Access Denied.";
+            }
+        }
+
+        function checkPass() {
+            const input = document.getElementById('passInput').value.toLowerCase();
+            if (input.includes("sorry")) {
+                document.getElementById('passwordArea').classList.add('hidden');
+                document.getElementById('yesBtn').classList.remove('hidden');
+                document.getElementById('questionText').innerHTML = "Apology accepted. <br>Try again? ❤️";
+            }
         }
 
         function celebrate() {
-            // Swaps the question for the success message
             document.getElementById('askSection').classList.add('hidden');
             document.getElementById('celebrateSection').classList.remove('hidden');
         }
