@@ -12,7 +12,7 @@
             height: 100vh;
             margin: 0;
             background-color: #ffebee;
-            /* This puts your image in the background */
+            /* Using the exact file name provided */
             background-image: linear-gradient(rgba(255, 235, 238, 0.5), rgba(255, 235, 238, 0.5)), url('A72B4E76-EB0E-4EFA-86DA-5DEDE32719F7_1_105_c.jpeg');
             background-size: cover;
             background-position: center;
@@ -21,8 +21,8 @@
             overflow: hidden; 
         }
         #container {
-            background: rgba(255, 255, 255, 0.85); /* See-through white */
-            backdrop-filter: blur(5px); /* Blurs the background image slightly behind the box */
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
             padding: 2rem;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
@@ -34,6 +34,7 @@
             justify-content: center;
             position: relative;
             border: 2px solid #d32f2f;
+            z-index: 5;
         }
         h1 { color: #d32f2f; font-size: 1.4rem; margin-bottom: 20px; text-shadow: 1px 1px 0px white; }
         .buttons {
@@ -50,14 +51,13 @@
             border-radius: 12px;
             cursor: pointer;
             z-index: 10;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         #yesBtn { background-color: #4caf50; color: white; }
         #noBtn { 
             background-color: #f44336; 
             color: white; 
-            transition: all 0.2s ease;
             white-space: nowrap;
+            position: relative; 
         }
         .hidden { display: none !important; }
         input {
@@ -79,7 +79,7 @@
             
             <div id="passwordArea" class="hidden">
                 <p style="font-weight: bold;">I'm Gonna Need An Apology.</p>
-                <p>So... What's the Magic Word?</p>
+                <p>What's the Magic Word?</p>
                 <input type="text" id="passInput" placeholder="Type here..." oninput="checkPass()">
             </div>
 
@@ -115,14 +115,17 @@
             
             if (noCount < messages.length) {
                 noBtn.innerHTML = messages[noCount];
-                
-                const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-                const maxY = window.innerHeight - noBtn.offsetHeight - 20;
-                
-                const randomX = Math.floor(Math.random() * maxX);
-                const randomY = Math.floor(Math.random() * maxY);
-                
                 noBtn.style.position = "fixed";
+
+                const btnWidth = noBtn.offsetWidth;
+                const btnHeight = noBtn.offsetHeight;
+
+                const maxX = window.innerWidth - btnWidth - 20;
+                const maxY = window.innerHeight - btnHeight - 20;
+
+                const randomX = Math.max(20, Math.floor(Math.random() * maxX));
+                const randomY = Math.max(20, Math.floor(Math.random() * maxY));
+                
                 noBtn.style.left = randomX + "px";
                 noBtn.style.top = randomY + "px";
                 
@@ -131,7 +134,7 @@
                 noBtn.classList.add('hidden');
                 yesBtn.classList.add('hidden');
                 document.getElementById('passwordArea').classList.remove('hidden');
-                questionText.innerHTML = "I'm Gonna Need An Apology.";
+                questionText.innerHTML = "Access Denied.";
             }
         }
 
@@ -147,6 +150,7 @@
         function celebrate() {
             document.getElementById('askSection').classList.add('hidden');
             document.getElementById('celebrateSection').classList.remove('hidden');
+            // Updating the image here as well for the final screen
             document.body.style.backgroundImage = "url('A72B4E76-EB0E-4EFA-86DA-5DEDE32719F7_1_105_c.jpeg')";
             document.body.style.backgroundBlendMode = "normal";
         }
